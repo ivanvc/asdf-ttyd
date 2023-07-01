@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for ttyd.
 GH_REPO="https://github.com/tsl0922/ttyd"
 TOOL_NAME="ttyd"
 TOOL_TEST="ttyd -h"
@@ -26,23 +25,27 @@ sort_versions() {
 
 list_github_tags() {
 	git ls-remote --tags --refs "$GH_REPO" |
-		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+		grep -o 'refs/tags/.*' | cut -d/ -f3-
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if ttyd has other means of determining installable versions.
 	list_github_tags
 }
 
 download_release() {
-	local version filename url
+	local version filename url arch os
 	version="$1"
 	filename="$2"
+	os="$(uname -s)"
+	arch="$(uname -m)"
 
-	# TODO: Adapt the release URL convention for ttyd
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/archive"
+	if [ "$os" == "Linux" ]; then
+		url="$url/ttyd.$arch"
+	else
+		url="$url/$version.tar.gz"
+		filename="$filename.tar.gz"
+	fi
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -59,9 +62,16 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		if [ -f "$ASDF_DOWNLOAD_PATH/CMakeLists.txt" ]; then
+			cd "$ASDF_DOWNLOAD_PATH"
+			mkdir build && cd build
+			cmake ..
+			make
+			cp ttyd "$install_path"
+		else
+			cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		fi
 
-		# TODO: Assert ttyd executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
