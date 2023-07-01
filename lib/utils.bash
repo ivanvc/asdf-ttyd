@@ -39,16 +39,16 @@ download_release() {
 	os="$(uname -s)"
 	arch="$(uname -m)"
 
-	url="$GH_REPO/archive"
+	url="$GH_REPO"
 	if [ "$os" == "Linux" ]; then
-		url="$url/ttyd.$arch"
+		url="$url/releases/download/$version/ttyd.$arch"
 	else
-		url="$url/$version.tar.gz"
+		url="$url/archive/refs/tags/$version.tar.gz"
 		filename="$filename.tar.gz"
 	fi
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	curl "${curl_opts[@]}" -o "$filename" "$url" || fail "Could not download $url"
 }
 
 install_version() {
@@ -69,7 +69,8 @@ install_version() {
 			make
 			cp ttyd "$install_path"
 		else
-			cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+			cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path/ttyd"
+			chmod +x "$install_path/ttyd"
 		fi
 
 		local tool_cmd
