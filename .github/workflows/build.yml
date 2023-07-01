@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: ConorMacBride/install-package@v1
         with:
-          brew: libwebsockets
+          brew: libwebsockets json-c
       - name: asdf_plugin_test
         uses: asdf-vm/actions/plugin-test@v2
         with:

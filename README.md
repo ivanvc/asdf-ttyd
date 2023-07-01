@@ -17,7 +17,7 @@
 
 - `bash`, `curl`, `tar`: generic POSIX utilities.
 - `cmake`, `libjson-c-dev`, `libwebsockets-dev` if installing from source
-  (macOS)
+  (`json-c` and `libwebsockets` on macOS)
 
 # Install
 
