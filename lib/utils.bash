@@ -5,7 +5,7 @@ set -euo pipefail
 GH_REPO="https://github.com/tsl0922/ttyd"
 TOOL_NAME="ttyd"
 TOOL_TEST="ttyd -h"
-MIN_VERSION="1.4.0"
+MIN_SUPPORTED_VERSION="1.4.0"
 
 fail() {
 	echo -e "asdf-$TOOL_NAME: $*"
