@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1091
 
 set -euo pipefail
 
@@ -9,4 +8,4 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=../lib/utils.bash
 . "${plugin_dir}/lib/utils.bash"
 
-printf "%s\\n\\n" "Manage your $TOOL_NAME versions per project. The minimum supported $TOOL_NAME versions is $MIN_SUPPORTED_VERSION"
+printf "%s\\n\\n%s\\n" "Manage your $TOOL_NAME versions per project. The minimum supported $TOOL_NAME versions is $MIN_SUPPORTED_VERSION" "Dependencies if compiling from source:"

@@ -8,10 +8,8 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=../lib/utils.bash
 . "${plugin_dir}/lib/utils.bash"
 
-printf "%s\\n\\n" "Dependencies if compiling from source:"
 cat <<-EOF
-* cmake
-* json-c
-* libwebsockets
+cmake
+json-c
+libwebsockets
 EOF
-printf "\\n"
