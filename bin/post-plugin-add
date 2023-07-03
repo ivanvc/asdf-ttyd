@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ "$(uname -s)" == "Darwin" ]; then
+	cat <<-EOF
+		Installing on macOS requires the following dependencies:
+		* cmake
+		* json-c
+		* libwebsockets
+
+		Make sure to have them installed, i.e. with Homebrew:
+		$ brew install cmake json-c libwebsockets
+	EOF
+fi
