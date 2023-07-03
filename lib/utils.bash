@@ -36,7 +36,7 @@ list_all_versions() {
 check_version() {
 	local version="$1"
 
-	if awk "BEGIN {exit ($version < $MIN_SUPPORTED_VERSION)}"; then
+	if awk "BEGIN {exit !($version < $MIN_SUPPORTED_VERSION)}"; then
 		printf "* WARNING asdf-%s was developed for versions \"%s\" and later.\\n" "$TOOL_NAME" "$MIN_SUPPORTED_VERSION"
 		printf "          Versions before this are not guaranteed to work.\\n"
 	fi
@@ -51,7 +51,11 @@ download_release() {
 
 	url="$GH_REPO"
 	if [ "$os" == "Linux" ]; then
-		url="$url/releases/download/$version/ttyd.$arch"
+		url="$url/releases/download/$version/ttyd"
+		if awk "BEGIN {exit !($version < 1.6.2)}"; then
+			url="$url"_linux
+		fi
+		url="$url.$arch"
 	else
 		url="$url/archive/refs/tags/$version.tar.gz"
 		filename="$filename.tar.gz"
