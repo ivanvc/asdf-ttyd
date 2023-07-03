@@ -5,6 +5,7 @@ set -euo pipefail
 GH_REPO="https://github.com/tsl0922/ttyd"
 TOOL_NAME="ttyd"
 TOOL_TEST="ttyd -h"
+MIN_VERSION="1.4.0"
 
 fail() {
 	echo -e "asdf-$TOOL_NAME: $*"
@@ -30,6 +31,15 @@ list_github_tags() {
 
 list_all_versions() {
 	list_github_tags
+}
+
+check_version() {
+	local version="$1"
+
+	if awk "BEGIN {exit ($version < $MIN_VERSION)}"; then
+		printf "* WARNING asdf-%s was developed for versions \"%s\" and later.\\n" "$TOOL_NAME" "$MIN_SUPPORTED_VERSION"
+		printf "          Versions before this are not guaranteed to work.\\n"
+	fi
 }
 
 download_release() {
