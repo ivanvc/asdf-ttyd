@@ -36,7 +36,7 @@ list_all_versions() {
 check_version() {
 	local version="$1"
 
-	if awk "BEGIN {exit ($version < $MIN_VERSION)}"; then
+	if awk "BEGIN {exit ($version < $MIN_SUPPORTED_VERSION)}"; then
 		printf "* WARNING asdf-%s was developed for versions \"%s\" and later.\\n" "$TOOL_NAME" "$MIN_SUPPORTED_VERSION"
 		printf "          Versions before this are not guaranteed to work.\\n"
 	fi
